@@ -31,6 +31,7 @@
         } */
         .code-img{
           height: 34px;
+          cursor: pointer;
         }
       </style>
 </head>
@@ -70,7 +71,7 @@
                   <input type="text" name="code" class="form-control" id="code" placeholder="请输入验证码">
                 </div>
                 <div class="col-sm-4">
-                  <img class="code-img" src="../img/code.PNG" alt="">
+                  <img class="code-img" src="/login/captchaImg.png" alt="">
                 </div>
               </div>
               <div class="form-group">
@@ -91,5 +92,19 @@
 </html>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="../lib/js/jquery-1.12.4.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
+<!-- Include all compiled plugins (below), or include individual fn iles as needed -->
 <script src="../lib/js/bootstrap.min.js"></script>
+<script>
+  // 入口函数
+  $(function(){
+    // 两次设置的url是一致
+    // 浏览器认为图片没有变
+    $(".code-img").click(function(){
+      console.log('你点啦');
+      // 重新获取验证码图片
+      // 重新赋值 src属性即可
+      // 直接报错
+      $(this).attr('src',$(this).attr('src')+`?${Math.random()}`);
+    })
+  })
+</script>

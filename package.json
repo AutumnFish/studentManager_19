@@ -1,0 +1,25 @@
+{
+  "name": "studentManager_19",
+  "version": "1.0.0",
+  "description": "管理系统",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AutumnFish/studentManager_19.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AutumnFish/studentManager_19/issues"
+  },
+  "homepage": "https://github.com/AutumnFish/studentManager_19#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "svg-captcha": "^1.3.11"
+  }
+}
