@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="../lib/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    <style>
+        .navbar-link.my-logout {
+            /* 权重问题
+                使用ui框架出现无法覆盖问题 一般是权重
+                解决方案
+                    1.保留原始类型 增加自己类名
+                    2.增加id
+                    3.important (慎用 行内式都盖不住) 坑
+                 */
+            font-size: 22px;
+            color: #ff0217;
+            font-weight: 700;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                                aria-expanded="false">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="#">欢迎进入后台管理</a>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <p class="navbar-text navbar-right">欢迎[么么哒]登陆
+                                <a href="#" class="navbar-link my-logout">登出</a>
+                            </p>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="list-group">
+                    <a href="#" class="list-group-item active">学生管理</a>
+                    <a href="#" class="list-group-item">系统管理</a>
+                    <a href="#" class="list-group-item">用户管理</a>
+                    <a href="#" class="list-group-item">修改密码</a>
+                    <a href="#" class="list-group-item">退出系统</a>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <ol class="breadcrumb">
+                            <li>
+                                <a href="#">首页</a>
+                            </li>
+                            <li>
+                                <a href="#">学生管理</a>
+                            </li>
+                            <li class="active">学生列表</li>
+                        </ol>
+                    </div>
+                    <div class="panel-heading">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">学生姓名</div>
+                                    <input type="text" class="form-control" id="exampleInputAmount" placeholder="请输入学生姓名进行查询">
+                                   
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success">查找</button>
+                            <button type="submit" class="btn btn-success">新增</button>
+                        </form>
+                    </div>
+
+                    <div class="panel-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>年龄</th>
+                                    <th>性别</th>
+                                    <th>手机号码</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="../lib/js/jquery-1.12.4.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="../lib/js/bootstrap.min.js"></script>
