@@ -2,7 +2,9 @@
 const MongoClient = require('mongodb').MongoClient;
 
 // 数据库地址
-const url = 'mongodb://localhost:27017';
+// localhost 虽然也是本机 最终还是要对应一个ip地址
+// const url = 'mongodb://localhost:27017';
+const url = 'mongodb://127.0.0.1:27017';
 
 // 
 const dbName = 'SZHM19';

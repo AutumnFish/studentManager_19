@@ -67,12 +67,16 @@ indexRoute.get('/delete',(req,res)=>{
 // id,name,age,friend
 indexRoute.get('/update',(req,res)=>{
     // 接收数据
-    // req.query
-    let name = req.query.name;
-    let age = req.query.age;
-    let friend = req.query.friend;
+let address = req.query.address;
+let age = req.query.age;
+let introduction = req.query.introduction;
+let name = req.query.name;
+let phone = req.query.phone;
+let sex = req.query.sex;
+
+"5b4da627f899f131b0a8887b"
     // 修改数据
-    myT.update('studentList',{_id:objectID(req.query.id)},{name,age,friend},(err,result)=>{
+    myT.update('studentList',{_id:objectID(req.query.id)},{address,age,introduction,name,phone,sex},(err,result)=>{
         if(!err)res.json({
             mess:'修改成功',
             code:200
@@ -94,13 +98,24 @@ indexRoute.get('/list',(req,res)=>{
 
 // 根据名字获取数据
 // 需要传递参数 userName过来
+// 目前只能根据用户名进行模糊查询
+// 增加能够根据id精确查询的功能
 indexRoute.get('/search',(req,res)=>{
+    // 定义查询的对象
+    let query  ={};
+
     // 用户名过来
-    let name = req.query.userName;
+    if(req.query.userName){
+        query.name = new RegExp(req.query.userName);
+    }
+    // 有id过来
+    if(req.query.id){
+        query._id = objectID(req.query.id);
+    }
     // console.log(name);
     // 来就给你所有的东西
     // mongoDB模糊查询 使用正则表达式
-    myT.find('studentList',{name:new RegExp(name)},(err,docs)=>{
+    myT.find('studentList',query,(err,docs)=>{
         if(!err)  res.json({
             mess:"数据",
             code:200,
