@@ -16,12 +16,14 @@
       <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
       <![endif]-->
-      <style>
-        .login-panel{
-          margin-top: 180px;
-        }
-        /* 上下左右居中 */
-        /* html,body{
+  <style>
+    .login-panel {
+      margin-top: 180px;
+    }
+
+    /* 上下左右居中 */
+
+    /* html,body{
           height: 100%;
         }
         body{
@@ -29,10 +31,11 @@
           justify-content: center;
           align-items: center;
         } */
-        .code-img{
-          height: 34px;
-        }
-      </style>
+
+    .code-img {
+      height: 34px;
+    }
+  </style>
 </head>
 
 <body>
@@ -64,7 +67,7 @@
                   <input type="password" name="userPass" class="form-control" id="userPass" placeholder="请输入密码">
                 </div>
               </div>
-        
+
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-4">
                   <button type="submit" class="btn btn-danger btn-block">注册</button>
@@ -84,3 +87,43 @@
 <script src="../lib/js/jquery-1.12.4.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="../lib/js/bootstrap.min.js"></script>
+<script src="../lib/js/jquery.md5.js"></script>
+<script>
+  // 绑定点击事件
+  // 加密方式
+  /*
+    加入一些混淆的代码
+    开头 结尾 加上随机数
+    市面上有很多现成的加密算法 
+    md5
+    加密算法算出来的结果 不可逆
+    常用的数值 的 md5结果 网络上曝光过
+    所谓的解密
+      进行匹配
+      $.md5(xxx)  直接计算 xxx ->md5值
+      $.md5(xxx,words) 把这两端一起加密(加盐)
+
+    浏览器段 直接发送密文
+
+    传输过程中加密
+      https协议
+        需要申请ssl证书(免费,商用)
+      s加密
+        传输的信息 都是密文
+  */
+  $(function () {
+    // 注册点击事件
+    $('form button[type=submit]').click(function (event) {
+      // // 阻止默认行为
+      // event.preventDefault();
+      // 加密
+      // 获取原始值
+      let oldPass = $("#userPass").val();
+      // 加盐(加多了一些 额外的字符串 增加密码的安全性)
+      var md5 = $.md5(oldPass,'keyboard cat');
+      // console.log(md5);
+
+      $("#userPass").val(md5)
+    })
+  })
+</script>

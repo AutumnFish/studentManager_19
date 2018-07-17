@@ -16,12 +16,14 @@
       <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
       <![endif]-->
-      <style>
-        .login-panel{
-          margin-top: 180px;
-        }
-        /* 上下左右居中 */
-        /* html,body{
+  <style>
+    .login-panel {
+      margin-top: 180px;
+    }
+
+    /* 上下左右居中 */
+
+    /* html,body{
           height: 100%;
         }
         body{
@@ -29,11 +31,12 @@
           justify-content: center;
           align-items: center;
         } */
-        .code-img{
-          height: 34px;
-          cursor: pointer;
-        }
-      </style>
+
+    .code-img {
+      height: 34px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
@@ -56,13 +59,13 @@
               <div class="form-group">
                 <label for="userName" class="col-sm-2 control-label">用户名</label>
                 <div class="col-sm-10">
-                  <input type="text" name="userName" class="form-control" id="userName" placeholder="请输入用户名">
+                  <input type="text" name="userName" class="form-control" id="userName" placeholder="请输入用户名" value="地下室吃瓜林">
                 </div>
               </div>
               <div class="form-group">
                 <label for="userPass" class="col-sm-2 control-label">密码</label>
                 <div class="col-sm-10">
-                  <input type="password" name="userPass" class="form-control" id="userPass" placeholder="请输入密码">
+                  <input type="password" name="userPass" class="form-control" id="userPass" placeholder="请输入密码" value="123456">
                 </div>
               </div>
               <div class="form-group">
@@ -77,7 +80,7 @@
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                   <button type="submit" class="btn btn-default">登陆</button>
-                  <a  href="/register" class="btn btn-danger">注册</a>
+                  <a href="/register" class="btn btn-danger">注册</a>
                 </div>
               </div>
             </form>
@@ -94,17 +97,32 @@
 <script src="../lib/js/jquery-1.12.4.js"></script>
 <!-- Include all compiled plugins (below), or include individual fn iles as needed -->
 <script src="../lib/js/bootstrap.min.js"></script>
+<script src="../lib/js/jquery.md5.js"></script>
 <script>
   // 入口函数
-  $(function(){
+  $(function () {
     // 两次设置的url是一致
     // 浏览器认为图片没有变
-    $(".code-img").click(function(){
+    $(".code-img").click(function () {
       console.log('你点啦');
       // 重新获取验证码图片
       // 重新赋值 src属性即可
       // 直接报错
-      $(this).attr('src',$(this).attr('src')+`?${Math.random()}`);
+      $(this).attr('src', $(this).attr('src') + `?${Math.random()}`);
     })
+
+    $('form button[type=submit]').click(function (event) {
+      // // 阻止默认行为
+      // event.preventDefault();
+      // 加密
+      // 获取原始值
+      let oldPass = $("#userPass").val();
+      // 加盐(加多了一些 额外的字符串 增加密码的安全性)
+      var md5 = $.md5(oldPass, 'keyboard cat');
+      // console.log(md5);
+
+      $("#userPass").val(md5)
+    })
+
   })
 </script>

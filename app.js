@@ -9,14 +9,11 @@ let path = require('path');
 let session = require('express-session');
 // 导入body-parser 格式化表单的数据
 let bodyParser = require('body-parser');
-// 导入mongoDB 
-const MongoClient = require('mongodb').MongoClient;
-// mongoDB 需要使用到的 配置
-// Connection URL
-const url = 'mongodb://localhost:27017';
+// 使用自己抽取的工具函数
+let myT = require(path.join(__dirname, 'tools/myT'));
+// 导入自己的首页路由
+let indexRoute = require(path.join(__dirname,'/route/indexRoute'));
 
-// Database Name
-const dbName = 'SZHM19';
 
 
 
@@ -38,6 +35,14 @@ app.use(session({
 app.use(bodyParser.urlencoded({
     extended: false
 }))
+
+
+// 使用 index路由中间件 挂载到 /index这个路径下面
+app.use('/index',indexRoute);
+
+// 导入 art-template
+app.engine('art', require('express-art-template'));
+app.set('views', '/static/views');
 
 
 // 路由--------------------------
@@ -63,20 +68,31 @@ app.post('/login', (req, res) => {
     let code = req.body.code;
     // 跟 session中的验证码进行比较
     if (code == req.session.captcha) {
-        // console.log('验证码正确');
-        // 设置session
-        req.session.userInfo = {
-            userName,
-            userPass
-        }
-        // 去首页
-        res.redirect('/index');
+        // 对
+        // 继续验证用户名跟密码
+        myT.find('userList',{userName,userPass},(err,docs)=>{
+            if(!err){
+                // 没错说明数据库没有问题
+                // 继续判断用户是否存在
+                if(docs.length==1){
+                    // 保存session
+                    req.session.userInfo = {
+                        userName
+                    }
+                    // 去首页
+                    myT.mess(res,'欢迎回来','/index');
+                }else{
+                    // 用户名或密码错误 没有注册
+                    myT.mess(res,'你是谁,你要干什么','/login');
+                }
+            }
+        })
     } else {
-        // console.log('失败');
-        // 打回去
-        // res.redirect('/login');
-        res.setHeader('content-type', 'text/html');
-        res.send('<script>alert("验证码失败");window.location.href="/login"</script>');
+        // 错
+        // 机器人(喝醉了,)
+        // 提示用户
+        myT.mess(res,'哥们,验证码不对哦,检查一下吧','/login');
+    
     }
 
 
@@ -98,20 +114,6 @@ app.get('/login/captchaImg.png', (req, res) => {
     req.session.captcha = captcha.text.toLocaleLowerCase();
     res.type('svg');
     res.status(200).send(captcha.data);
-})
-
-// 路由4
-// 访问首页 index
-app.get('/index', (req, res) => {
-    // 有session 欢迎
-    if (req.session.userInfo) {
-        // 登陆了
-        res.sendFile(path.join(__dirname, 'static/views/index.html'));
-    } else {
-        // 没有session 去登录页
-        res.setHeader('content-type', 'text/html');
-        res.send("<script>alert('请登录');window.location.href='/login'</script>");
-    }
 })
 
 // 路由5
@@ -138,38 +140,25 @@ app.post('/register', (req, res) => {
     // 获取用户数据
     let userName = req.body.userName;
     let userPass = req.body.userPass;
-    console.log(userName);
-    console.log(userPass);
-
-    MongoClient.connect(url,  (err, client)=>{
-        // 连上mongo之后 选择使用的库
-        const db = client.db(dbName);
-        // 选择使用的集合
-        let collection = db.collection('userList');
-
-        // 查询数据
-        collection.find({
-            userName
-        }).toArray((err,doc)=>{
-            console.log(doc);
-            if(doc.length==0){
-                // 没有人
-                // 新增数据
-                collection.insertOne({
-                    userName,
-                    userPass
-                },(err,result)=>{
-                    console.log(err);
-                    // 注册成功了
-                    res.setHeader('content-type','text/html');
-                    res.send("<script>alert('欢迎入坑');window.location='/login'</script>")
-                    // 关闭数据库连接即可
-                    client.close();
-                })
-            }
-        })
-        
-    });
+    // 使用自己封装的工具函数进行数据库操纵
+    myT.find('userList', {
+        userName
+    }, (err, docs) => {
+        if (docs.length == 0) {
+            // 可以注册
+            myT.insert('userList', {
+                userName,
+                userPass
+            }, (err, result) => {
+                if (!err) {
+                    myT.mess(res, '欢迎加入我们', '/login');
+                }
+            })
+        } else {
+            // 已被注册
+            myT.mess(res, '很遗憾已被使用', '/register');
+        }
+    })
 })
 
 
