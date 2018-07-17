@@ -3,6 +3,11 @@ var express = require('express');
 let indexRoute = express.Router();
 // 引入path模块
 let path = require('path');
+// 导入myT
+let myT = require(path.join(__dirname,'../tools/myT'));
+// 使用mongoDB包装id 
+// id 需要使用 mongoDB.ObjectId 这个方法 进行包装 才可以使用
+let objectID = require('mongodb').ObjectId;
 
 
 // 注册路由
@@ -25,10 +30,85 @@ indexRoute.get('/', (req, res) => {
     }
 })
 
-// 写接口
-indexRoute.get('/search',(req,res)=>{
-    res.send('result');
+//----------------------接口----------------------------
+// 增
+indexRoute.get('/insert',(req,res)=>{
+    // 接收数据
+    // console.log(req.query);
+    // 保存数据
+    // 接口 json格式
+    // 写一个js对象 json_
+    myT.insert('studentList',req.query,(err,result)=>{
+        if(!err) res.json({
+            mess:'新增成功',
+            code:200
+        })
+    })
+    // 提示用户
 })
+
+// 删
+// key id
+indexRoute.get('/delete',(req,res)=>{
+    // 接收数据
+    let delerteId = req.query.id;
+    // 删除数据
+    myT.delete('studentList',{_id:objectID(delerteId)},(err,result)=>{
+        if(!err)res.json({
+            mess:'删除成功',
+            code:200
+        })
+    })
+    // 提示用户
+    // res.send('delete');
+})
+
+// 改
+// id,name,age,friend
+indexRoute.get('/update',(req,res)=>{
+    // 接收数据
+    // req.query
+    let name = req.query.name;
+    let age = req.query.age;
+    let friend = req.query.friend;
+    // 修改数据
+    myT.update('studentList',{_id:objectID(req.query.id)},{name,age,friend},(err,result)=>{
+        if(!err)res.json({
+            mess:'修改成功',
+            code:200
+        })
+    })
+})
+
+// 获取所有数据
+indexRoute.get('/list',(req,res)=>{
+    // 来就给你所有的东西
+    myT.find('studentList',{},(err,docs)=>{
+        if(!err) res.json({
+            mess:"数据",
+            code:200,
+            list:docs
+        });
+    })
+})
+
+// 根据名字获取数据
+// 需要传递参数 userName过来
+indexRoute.get('/search',(req,res)=>{
+    // 用户名过来
+    let name = req.query.userName;
+    // console.log(name);
+    // 来就给你所有的东西
+    // mongoDB模糊查询 使用正则表达式
+    myT.find('studentList',{name:new RegExp(name)},(err,docs)=>{
+        if(!err)  res.json({
+            mess:"数据",
+            code:200,
+            list:docs
+        });
+    })
+})
+
 
 // 暴露出去
 module.exports = indexRoute;
